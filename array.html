@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col col-md-6">
+                <h3>Form tambah ikan <i class="fa fa-file text-primary"></i></h3>
+                <form action="" onsubmit="event.preventDefault();onFormSubmit();">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Nama Ikan</span>
+                        </div>
+                        <input type="text" class="form-control" id="nama_ikan" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Jenis Ikan</span>
+                        </div>
+                        <input type="text" class="form-control" id="jenis_ikan" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" required>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block"><i class="fa fa-check-circle"></i> Sumbit</button>
+                </form>
+            </div>
+            <div class="col col-md-6">
+                <h3>Daftar nama ikan <i class="fa fa-list-alt text-info"></i></h3>
+                <table class="table table-striped table-hover table-bordered" id="ikanTabel">
+                    <thead>
+                        <tr>
+                            <th>Nama Ikan</th>
+                            <th>Jenis Ikan</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="ikanList">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+        
+    <script>
+        var arrBuah = [
+            'apel'
+        ]
+        var ikanObjek = [
+            {
+                nama: 'Tongkol',
+                jenis: 'Ikan Laut'
+            },
+            {
+                nama: 'Nila',
+                jenis: 'Ikan Tawar'
+            }
+        ]
+        var selectedRow = null
+
+        for (let i = 0; i < ikanObjek.length; i++) {
+            ikanList(ikanObjek[i])
+            
+        }
+
+        function ikanList(data) {
+            let table = document.getElementById('ikanTabel').getElementsByTagName('tbody')[0]
+            let newRow = table.insertRow(table.length)
+            newRow.insertCell(0).innerHTML = data.nama
+            newRow.insertCell(1).innerHTML = data.jenis
+            newRow.insertCell(2).innerHTML = '<a href="#" class="text-info mr-2" title="edit" onclick="editIkan(this)"><i class="fa fa-edit"></i></a><a href="#" class="text-danger" title="delete" onclick="deleteIkan(this)"><i class="fa fa-trash"></i></a>'
+        }
+        function editIkan(td) {
+            selectedRow = td.parentElement.parentElement
+            document.getElementById('nama_ikan').value = selectedRow.cells[0].innerHTML
+            document.getElementById('jenis_ikan').value = selectedRow.cells[1].innerHTML
+        }
+        function updateRecord(formData) {
+            selectedRow.cells[0].innerHTML = formData.nama
+            selectedRow.cells[1].innerHTML = formData.jenis
+        }
+        function deleteIkan(td) {
+            if (confirm('Apakah Anda Yakin ?')) {
+                row = td.parentElement.parentElement
+                document.getElementById('ikanTabel').deleteRow(row.rowIndex)
+                resetForm()
+            }
+        }
+
+        function onFormSubmit() {
+            let formData = readFormData()
+            if (selectedRow === null) {
+                ikanList(formData)
+            } else {
+                updateRecord(formData)
+            }
+            resetForm()
+        }
+        function readFormData() {
+            let form = {}
+            form['nama'] = document.getElementById('nama_ikan').value
+            form['jenis'] = document.getElementById('jenis_ikan').value
+            return form
+        }
+        function resetForm() {
+            nama_ikan = ''
+            jenis_ikan = ''
+        }
+
+        
+    </script>
+    
+</body>
+</html>
